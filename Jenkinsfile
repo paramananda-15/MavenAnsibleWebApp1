@@ -1,15 +1,17 @@
 pipeline {
-    agent any  // Use any available agent
-    
+    agent any
+
     environment {
-        LANG = 'en_US.UTF-8'
-        LC_ALL = 'en_US.UTF-8'
-    }   // this has to be added only if you get an error saying UTF required is 8 but showing in ISO00009
+        LANG = 'C.UTF-8'
+        LC_ALL = 'C.UTF-8'
+    }
 
     tools {
-        maven 'Maven'  // Ensure this matches the name configured in Jenkins
+        maven 'Maven'
     }
+
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/paramananda-15/MavenAnsibleWebApp1-CICD.git'
@@ -18,23 +20,24 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'  // Run Maven build
+                sh 'mvn clean package'
             }
         }
 
-     stage('Archive') {
+        stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'target/*.war', fingerprint:true
+                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
             }
         }
+
         stage('Deploy') {
             steps {
-               sh 'mvn clean package'  
-               sh 'ansible-playbook ansible/playbook.yml -i ansible/hosts.ini'
+                sh '''
+                export LANG=C.UTF-8
+                export LC_ALL=C.UTF-8
+                ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+                '''
             }
         }
-
-                  
     }
-
-   }
+}
