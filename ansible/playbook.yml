@@ -1,6 +1,7 @@
 - name: Deploy to Tomcat
-  hosts: web
+  hosts: localhost
   become: yes
+
   tasks:
     - name: Copy WAR file to Tomcat
       copy:
@@ -9,6 +10,9 @@
         remote_src: no
 
     - name: Restart Tomcat
-  systemd:
-    name: tomcat10
-    state: restarted
+      systemd:
+        name: tomcat10
+        state: restarted
+        
+
+
