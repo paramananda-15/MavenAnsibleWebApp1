@@ -9,6 +9,6 @@
         remote_src: no
 
     - name: Restart Tomcat
-      systemd:
-        name: tomcat
-        state: restarted
+  systemd:
+    name: tomcat10
+    state: restarted
